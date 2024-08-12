@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/config/theme-provider";
+import { ThemeProvider } from "@/providers/shadcn/theme-provider/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 
 const fontSans = FontSans({
@@ -35,7 +35,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            {children}
+            <div className="pl-14">
+              {children}
+            </div>
           </ThemeProvider>  
       </body>
     </html>
