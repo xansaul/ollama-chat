@@ -14,7 +14,7 @@ export const FormChat = () => {
     const updateMessageStream = useMessagesStore(state=>state.updateMessageStream);
 
     const sendMessage = async (message: string) => {
-
+        
         const response = await fetch('/api/generate',{
             method: 'POST',
             body: JSON.stringify({message}),

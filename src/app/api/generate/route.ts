@@ -15,7 +15,7 @@ export async function POST(req: Request) {
                     for await (const part of response) {
                         if (part.message && part.message.content) {
                             controller.enqueue(part.message.content);
-                        }
+                        }   
                     }
                     controller.close();
                 } catch (error) {

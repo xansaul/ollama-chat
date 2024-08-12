@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent } from "../../ui/card";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-
+import { CustomMarkdown } from "../markdown/CustomMarkdown";
 
 
 const messageVariants = cva(
@@ -31,10 +31,10 @@ export const Message = ({  message, variant, className  }: Props) => {
 
   return (
     <Card className={cn(messageVariants({variant, className}))}>
-      <CardContent className="flex justify-start items-center p-0 py-2 px-3">
-        <span>{message}</span>
+      <CardContent className="p-0 py-2 px-3">
+        <CustomMarkdown  markdown={message} />
       </CardContent>
-    </Card>
+    </Card> 
   );
 
 };
