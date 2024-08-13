@@ -30,7 +30,7 @@ export const MessagesContainer = () => {
   }
 
   return (
-    <div className="mb-2 relative min-h-[75vh] max-h-[75vh] overflow-auto rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
+    <div className="mb-2 relative min-h-[80vh] max-h-[80vh] overflow-y-auto rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
         {
             messages.map((message, idx)=>{
 

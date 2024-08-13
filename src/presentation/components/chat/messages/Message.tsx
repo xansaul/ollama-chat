@@ -8,7 +8,7 @@ import { CustomMarkdown } from "../markdown/CustomMarkdown";
 
 
 const messageVariants = cva(
-  " w-fit border-primary/20 my-2",{
+  " w-fit max-w-full border-primary/20 my-2",{
     variants: {
       variant: {
         bot: "bg-primary/10 self-start",

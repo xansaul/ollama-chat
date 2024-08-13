@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/presentation/components";
+import { Navbar, TooltipProvider } from "@/presentation/components";
 import { ThemeProvider } from "@/presentation/providers";
 
 
@@ -36,10 +36,13 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
-            <div className="pl-14">
-              {children}
-            </div>
+            <TooltipProvider>
+              
+              <Navbar />
+              <div className="pl-14">
+                {children}
+              </div>
+            </TooltipProvider>
           </ThemeProvider>  
       </body>
     </html>
