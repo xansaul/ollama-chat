@@ -1,37 +1,35 @@
 "use server";
 
-import ollama from 'ollama';
+import { ollama } from 'ollama-ai-provider';
 import { NextResponse } from 'next/server';
+import { streamText } from 'ai';
 
 export async function POST(req: Request) {
     const { message } = await req.json();
+    const signal = req.signal;
     
-    try {
-        const messageObject = { role: 'user', content: message };
-        const response = await ollama.chat({ model: 'llama3.1:latest', messages: [messageObject], stream: true });
+    const { textStream } = await streamText({
+        model: ollama('llama3.1:latest'),
+        prompt: message,
+        abortSignal: signal
+    });
 
-        const stream = new ReadableStream({
-            async start(controller) {
-                try {
-                    for await (const part of response) {
-                        if (part.message && part.message.content) {
-                            controller.enqueue(part.message.content);
-                        }
-                    }
-                } catch (error) {
-                    controller.error(error);
-                } finally {
-                    controller.close();
+    const readableStream = new ReadableStream({
+        async start(controller) {
+            try {
+                for await (const partOfText of textStream) {
+                    controller.enqueue(partOfText);
                 }
+            } catch (error) {
+                controller.error(error);
+            } finally {
+                controller.close();
             }
-        });
+        }
+    });
 
+    return new NextResponse(readableStream, {
+        headers: { 'Content-Type': 'text/plain' }
+    });
 
-        return new NextResponse(stream, {
-            headers: { 'Content-Type': 'text/plain' }
-        });
-    } catch (error) {
-        console.error('Error processing request', error);
-        return new NextResponse('Error processing request', { status: 500 });
-    }
 }
