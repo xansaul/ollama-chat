@@ -2,19 +2,35 @@
 
 import { useMessagesStore } from "@/presentation/store";
 import { Message } from "../messages/Message";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const MessagesContainer = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const messages =  useMessagesStore(state=>state.messages);
+  const [isUserScroll, setIsUserScroll] = useState(false);
+
   useEffect(() => {
-    if (chatContainerRef.current) {
+    if (chatContainerRef.current && !isUserScroll) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isUserScroll]);
+
+  const handleScrollUser = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const divHeight = event.currentTarget.scrollHeight - event.currentTarget.clientHeight;
+    const offset = divHeight - event.currentTarget.scrollTop;
+    
+    if (event.currentTarget.scrollTop<divHeight){
+      setIsUserScroll(true);
+    }
+
+    if(offset <= 20){
+      setIsUserScroll(false);
+    }
+
+  }
 
   return (
-    <div className="mb-2 relative min-h-[75vh] max-h-[75vh] overflow-auto rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef}>
+    <div className="mb-2 relative min-h-[75vh] max-h-[75vh] overflow-auto rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
         {
             messages.map((message, idx)=>{
 
