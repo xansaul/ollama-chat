@@ -5,18 +5,18 @@ import React, { useRef, useState } from 'react'
 
 import { useMessagesStore } from '@/presentation/store';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip'
-import { Paperclip, Mic, CornerDownLeft } from 'lucide-react'
+import { Paperclip, Mic, CornerDownLeft, Square } from 'lucide-react'
 import { Button, Label, Textarea } from '../..';
 import { sendMessageUseCase } from '@/domain/use-cases/send-message.use-case';
 
 export const FormChat = () => {
- 
+
     const [message, setMessage] = useState('');
     const createMessage = useMessagesStore(state => state.createMessage);
     const updateMessageStream = useMessagesStore(state => state.updateMessageStream);
     const [isLoading, setIsLoading] = useState(false);
 
-    const abortController = useRef(new AbortController());
+    const abortController = useRef<AbortController>(new AbortController());
     const isRunning = useRef(false)
 
 
@@ -41,20 +41,42 @@ export const FormChat = () => {
         setIsLoading(true);
         createMessage({ from: 'bot', message: '' });
         const stream = sendMessageUseCase(message, abortController.current.signal);
-        
+
+
         for await (const text of stream) {
             updateMessageStream(text);
         }
-        
+
         setIsLoading(false);
+        
         isRunning.current = false;
 
+    }
+
+
+    const handleAbort = async() => {
+        if (abortController.current) {
+            await abortController.current.abort('User request');
+            abortController.current = new AbortController();
+            setIsLoading(false);
+        }
     }
 
     return (
         <div
             className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring" x-chunk="dashboard-03-chunk-1"
         >
+
+            {
+                isLoading && (
+                    <Button variant="outline" size="icon" className="absolute right-1 top-1" onClick={handleAbort}>
+                        <Square />
+                    </Button>
+                )
+            }
+
+
+
             <Label htmlFor="message" className="sr-only">
                 Message
             </Label>
