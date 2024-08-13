@@ -27,7 +27,8 @@ export async function* sendMessageUseCase(message: string, abortSignal: AbortSig
                 yield messageResponse;
             }
         } catch (error) {
-            console.error('Error while reading stream', error);
+            
+            return null;
         } finally {
             reader.releaseLock();
         }
