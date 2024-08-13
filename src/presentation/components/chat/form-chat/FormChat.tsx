@@ -1,63 +1,53 @@
 "use client";
 
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { useMessagesStore } from '@/store/messages/useMessagesStore'
+
+import React, { useRef, useState } from 'react'
+
+import { useMessagesStore } from '@/presentation/store';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip'
 import { Paperclip, Mic, CornerDownLeft } from 'lucide-react'
-import React, { useState } from 'react'
+import { Button, Label, Textarea } from '../..';
+import { sendMessageUseCase } from '@/domain/use-cases/send-message.use-case';
 
 export const FormChat = () => {
+ 
     const [message, setMessage] = useState('');
-    const createMessage = useMessagesStore(state=>state.createMessage);
-    const updateMessageStream = useMessagesStore(state=>state.updateMessageStream);
+    const createMessage = useMessagesStore(state => state.createMessage);
+    const updateMessageStream = useMessagesStore(state => state.updateMessageStream);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const sendMessage = async (message: string) => {
-        
-        const response = await fetch('/api/generate',{
-            method: 'POST',
-            body: JSON.stringify({message}),
-            headers: {
-                'Content-Type': 'application/json' 
-            },
-        });
+    const abortController = useRef(new AbortController());
+    const isRunning = useRef(false)
 
-        if (!response.body) {
-            console.error('No body in response');
-            return;
+
+    const handleSendMessage = async () => {
+        if (message === '') return;
+
+
+        if (isRunning.current) {
+            abortController.current.abort();
+            abortController.current = new AbortController();
         }
-      
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let messageResponse = '';
-        createMessage({from: 'bot', message: messageResponse});
-      
-        try {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                
-                messageResponse += decoder.decode(value, { stream: true });
-                
-                updateMessageStream(messageResponse);
-            }
 
-        } catch (error) {
-            console.error('Error reading stream', error);
-        }
-      };
-      
-    const handleSendMessage = () => {
-        if (message==='') return;
+
+        setMessage('');
 
         createMessage({
             message,
             from: 'user'
         });
-        setMessage('');
 
-        sendMessage(message);
+
+        setIsLoading(true);
+        createMessage({ from: 'bot', message: '' });
+        const stream = sendMessageUseCase(message, abortController.current.signal);
+        
+        for await (const text of stream) {
+            updateMessageStream(text);
+        }
+        
+        setIsLoading(false);
+        isRunning.current = false;
 
     }
 
@@ -72,7 +62,7 @@ export const FormChat = () => {
                 id="message"
                 placeholder="Type your message here..."
                 className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-                onChange={(event)=>setMessage(event.target.value)}
+                onChange={(event) => setMessage(event.target.value)}
                 value={message}
             />
             <div className="flex items-center p-3 pt-0">
@@ -94,7 +84,7 @@ export const FormChat = () => {
                     </TooltipTrigger>
                     <TooltipContent side="top">Use Microphone</TooltipContent>
                 </Tooltip>
-                <Button onClick={handleSendMessage} size="sm" className="ml-auto gap-1.5">
+                <Button onClick={handleSendMessage} size="sm" className="ml-auto gap-1.5" disabled={isLoading}>
                     Send Message
                     <CornerDownLeft className="size-3.5" />
                 </Button>

@@ -17,9 +17,12 @@ export async function POST(req: Request) {
                             controller.enqueue(part.message.content);
                         }   
                     }
-                    controller.close();
+                    
                 } catch (error) {
                     controller.error(error);
+                }
+                finally {
+                    controller.close();
                 }
             }
         });

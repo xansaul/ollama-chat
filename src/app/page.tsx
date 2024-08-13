@@ -1,6 +1,5 @@
-import { FormChat } from "@/components/chat/form-chat/FormChat";
-import { MessagesContainer } from "@/components/chat/messages-container/MessagesContainer";
 
+import { FormChat, MessagesContainer } from "@/presentation/components";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 

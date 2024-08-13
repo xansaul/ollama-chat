@@ -32,7 +32,7 @@ export const Message = ({  message, variant, className  }: Props) => {
   return (
     <Card className={cn(messageVariants({variant, className}))}>
       <CardContent className="p-0 py-2 px-3">
-        <CustomMarkdown  markdown={message} />
+        <CustomMarkdown markdown={message} />
       </CardContent>
     </Card> 
   );
