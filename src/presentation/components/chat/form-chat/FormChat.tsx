@@ -11,13 +11,15 @@ import {
 import { Paperclip, Mic, CornerDownLeft, Square } from "lucide-react";
 import { Button, Label, Textarea } from "../..";
 import { sendMessageUseCase } from "@/domain/use-cases/send-message.use-case";
+import { v4 as uuidv4 } from 'uuid';
 
 export const FormChat = () => {
     const createMessage = useMessagesStore((state) => state.createMessage);
-    const [message, setMessage] = useState("");
     const updateMessageStream = useMessagesStore(
         (state) => state.updateMessageStream
     );
+
+    const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const abortController = useRef<AbortController>(new AbortController());
@@ -35,13 +37,15 @@ export const FormChat = () => {
         setMessage("");
 
         createMessage({
+            id: uuidv4(),
             message,
             from: "user",
         });
 
         setIsLoading(true);
-        createMessage({ from: "bot", message: "" });
-        const stream = sendMessageUseCase(message, abortController.current.signal);
+        const messages = createMessage({ from: "bot", message: "", id: uuidv4() });
+
+        const stream = sendMessageUseCase(messages, abortController.current.signal);
 
         for await (const text of stream) {
             updateMessageStream(text);

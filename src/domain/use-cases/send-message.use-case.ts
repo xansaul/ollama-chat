@@ -1,8 +1,15 @@
-export async function* sendMessageUseCase(message: string, abortSignal: AbortSignal) {
+import { MessageMapper } from "@/infrastructure/mappers/message-mappers/MessageMapper";
+import { MessageEntity } from "../entities";
+
+
+export async function* sendMessageUseCase(messages: MessageEntity[], abortSignal: AbortSignal) {
+    console.log(messages.map(message=>MessageMapper.fromMessageEntityToIaMessage(message)))
     try {
         const response = await fetch('/api/generate', {
             method: 'POST',
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ 
+                messages: messages.map(message=>MessageMapper.fromMessageEntityToIaMessage(message))
+             }),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -27,7 +34,6 @@ export async function* sendMessageUseCase(message: string, abortSignal: AbortSig
                 yield messageResponse;
             }
         } catch (error) {
-            
             return null;
         } finally {
             reader.releaseLock();
