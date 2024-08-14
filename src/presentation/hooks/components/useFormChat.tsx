@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const useFormChat = () => {
 
     const createMessage = useMessagesStore((state) => state.createMessage);
+    const toggleIsBotTyping = useMessagesStore((state) => state.toggleIsBotTyping);
     const updateMessageStream = useMessagesStore(
         (state) => state.updateMessageStream
     );
@@ -27,24 +28,26 @@ export const useFormChat = () => {
 
         setMessage("");
 
-        createMessage({
+        
+        setIsLoading(true);
+        toggleIsBotTyping();
+        
+        const messages = createMessage({
             id: uuidv4(),
             message,
             from: "user",
         });
-
-        setIsLoading(true);
-        const messages = createMessage({ from: "bot", message: "", id: uuidv4() });
-    
+        
         const stream = sendMessageUseCase(
-            messages.slice(0, messages.length-1),
+            messages,
             abortController.current.signal
         );
-
+        createMessage({ from: "bot", message: "", id: uuidv4() });
         for await (const text of stream) {
             updateMessageStream(text);
         }
-
+        
+        toggleIsBotTyping();
         setIsLoading(false);
 
         isRunning.current = false;

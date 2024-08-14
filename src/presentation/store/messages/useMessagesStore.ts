@@ -5,6 +5,8 @@ interface MessageStoreState {
     messages: MessageEntity[];
     createMessage: (messageEntity:MessageEntity)=>MessageEntity[];
     updateMessageStream: (message: string) =>void;
+    isBotTyping: boolean;
+    toggleIsBotTyping: () => void;
 }
 
 export const useMessagesStore = create<MessageStoreState>()((set, get)=>({
@@ -24,5 +26,9 @@ export const useMessagesStore = create<MessageStoreState>()((set, get)=>({
         set(()=>({
             messages: newMessages
         }));
+    },
+    isBotTyping: false,
+    toggleIsBotTyping: () => {
+        set(state=>({isBotTyping: !state.isBotTyping}))
     }
 }));

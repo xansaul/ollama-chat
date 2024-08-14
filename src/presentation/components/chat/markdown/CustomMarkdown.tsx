@@ -1,38 +1,41 @@
 "use client";
 import React from 'react';
-import ReactMarkdown, { Components } from 'react-markdown';
+import Markdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
 
 interface MarkdownRendererProps {
   markdown: string;
 }
 
 export const CustomMarkdown: React.FC<MarkdownRendererProps> = ({ markdown }) => {
-  const components: Components = {
-    code({ className, children, inline,...rest }: any) {
-      const match = /language-(\w+)/.exec(className || '');
-      if (match) {
-        return (
-          <SyntaxHighlighter
-            PreTag="pre"
-            language={match[1]}
-            style={vscDarkPlus}
-          >
-            {String(children).replace(/\n$/, '')}
-          </SyntaxHighlighter>
-        );
-      }
-      return (
-        <code className={className} {...rest}>
-          {children}
-        </code>
-      );
-    }
-  };
+  return (
 
-  return <ReactMarkdown components={components}>{markdown}</ReactMarkdown>;
+    <Markdown
+      components={{
+        code(props) {
+          const { children, className, node, ...rest } = props as any;
+          const match = /language-(\w+)/.exec(className || '')
+          return match ? (
+            <SyntaxHighlighter
+              {...rest}
+              PreTag="div"
+              language={match[1]}
+              style={vscDarkPlus}
+            >
+              {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
+          ) : (
+            <code {...rest} className={className}>
+              {children}
+            </code>
+          )
+        }
+      }}
+    >
+      {markdown}
+    </Markdown>
+  )
 };
 
 

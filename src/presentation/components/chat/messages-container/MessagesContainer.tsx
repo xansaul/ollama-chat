@@ -3,10 +3,12 @@
 import { useMessagesStore } from "@/presentation/store";
 import { Message } from "../messages/Message";
 import { useEffect, useRef, useState } from "react";
+import { Brain } from "lucide-react";
 
 export const MessagesContainer = () => {
+  const isBotTyping = useMessagesStore(state => state.isBotTyping);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const messages =  useMessagesStore(state=>state.messages);
+  const messages = useMessagesStore(state => state.messages);
   const [isUserScroll, setIsUserScroll] = useState(false);
 
   useEffect(() => {
@@ -18,28 +20,35 @@ export const MessagesContainer = () => {
   const handleScrollUser = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const divHeight = event.currentTarget.scrollHeight - event.currentTarget.clientHeight;
     const offset = divHeight - event.currentTarget.scrollTop;
-    
-    if (event.currentTarget.scrollTop<divHeight){
+
+    if (event.currentTarget.scrollTop < divHeight) {
       setIsUserScroll(true);
     }
 
-    if(offset <= 20){
+    if (offset <= 20) {
       setIsUserScroll(false);
     }
 
   }
 
   return (
-    <div className="mb-2 relative min-h-[80vh] max-h-[80vh] overflow-y-auto rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
-        {
-            messages.map((message, idx)=>{
+    <div className="mb-2 relative min-h-[80vh] max-h-[80vh] overflow-y-auto overflow-x-hidden rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
+      {
+        messages.map((message) => {
 
-              return message.from === 'user'?
-                 (<Message key={idx} {...message}/>): 
-                 (<Message key={idx} {...message} variant="bot" />)
-            }
-            )
+          return message.from === 'user' ?
+            (<Message key={message.id} {...message} />) :
+            (<Message key={message.id} {...message} variant="bot" />)
         }
+        )
+      }
+      {
+        isBotTyping && (<div className="flex flex-col w-full">
+          <div className="self-start">
+            <Brain className="animate-pulse animate-infinite animate-duration-[1600ms] animate-ease-linear" absoluteStrokeWidth size="19" />
+          </div>
+        </div>)
+      }
     </div>
   )
 }

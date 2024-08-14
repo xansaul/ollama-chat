@@ -9,13 +9,13 @@ import { CustomMarkdown } from "../markdown/CustomMarkdown";
 
 const messageVariants = cva(
   `
-    animate-fade animate-once animate-duration-[400ms]
+    animate-once animate-duration-[320ms] animate-ease-linear
     w-fit max-w-full border-primary/20 my-2
   `,{
     variants: {
       variant: {
-        bot: "bg-primary/10 self-start",
-        user: "bg-blue-700 self-end"
+        bot: "bg-primary/10 self-start animate-fade-right",
+        user: "bg-blue-700 self-end animate-fade-left "
       }
     },
     defaultVariants: {
@@ -32,9 +32,13 @@ interface Props extends VariantProps<typeof messageVariants> {
   
 export const Message = ({  message, variant, className  }: Props) => {
 
+  if (message === ""){
+    return null;
+  }
+
   return (
     <Card className={cn(messageVariants({variant, className}))}>
-      <CardContent className="p-0 py-2 px-3">
+      <CardContent className="p-0 py-2 px-3">  
         <CustomMarkdown markdown={message} />
       </CardContent>
     </Card> 
