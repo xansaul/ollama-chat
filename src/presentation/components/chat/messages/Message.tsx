@@ -8,7 +8,10 @@ import { CustomMarkdown } from "../markdown/CustomMarkdown";
 
 
 const messageVariants = cva(
-  " w-fit max-w-full border-primary/20 my-2",{
+  `
+    animate-fade animate-once animate-duration-[400ms]
+    w-fit max-w-full border-primary/20 my-2
+  `,{
     variants: {
       variant: {
         bot: "bg-primary/10 self-start",

@@ -3,7 +3,6 @@ import { MessageEntity } from "../entities";
 
 
 export async function* sendMessageUseCase(messages: MessageEntity[], abortSignal: AbortSignal) {
-    console.log(messages.map(message=>MessageMapper.fromMessageEntityToIaMessage(message)))
     try {
         const response = await fetch('/api/generate', {
             method: 'POST',

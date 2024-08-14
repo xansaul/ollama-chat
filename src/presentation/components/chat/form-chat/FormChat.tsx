@@ -1,8 +1,5 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-
-import { useMessagesStore } from "@/presentation/store";
 import {
     Tooltip,
     TooltipTrigger,
@@ -10,59 +7,13 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Paperclip, Mic, CornerDownLeft, Square } from "lucide-react";
 import { Button, Label, Textarea } from "../..";
-import { sendMessageUseCase } from "@/domain/use-cases/send-message.use-case";
-import { v4 as uuidv4 } from 'uuid';
+import { useFormChat } from "@/presentation/hooks/components/useFormChat";
+
+
 
 export const FormChat = () => {
-    const createMessage = useMessagesStore((state) => state.createMessage);
-    const updateMessageStream = useMessagesStore(
-        (state) => state.updateMessageStream
-    );
 
-    const [message, setMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    const abortController = useRef<AbortController>(new AbortController());
-    const isRunning = useRef(false);
-
-    const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (message === "") return;
-
-        if (isRunning.current) {
-            abortController.current.abort();
-            abortController.current = new AbortController();
-        }
-
-        setMessage("");
-
-        createMessage({
-            id: uuidv4(),
-            message,
-            from: "user",
-        });
-
-        setIsLoading(true);
-        const messages = createMessage({ from: "bot", message: "", id: uuidv4() });
-
-        const stream = sendMessageUseCase(messages, abortController.current.signal);
-
-        for await (const text of stream) {
-            updateMessageStream(text);
-        }
-
-        setIsLoading(false);
-
-        isRunning.current = false;
-    };
-
-    const handleAbort = async () => {
-        if (abortController.current) {
-            await abortController.current.abort("User request");
-            abortController.current = new AbortController();
-            setIsLoading(false);
-        }
-    };
+    const { handleAbort, handleSendMessage, isLoading, message, setMessage } = useFormChat();
 
     return (
         <form
@@ -99,7 +50,7 @@ export const FormChat = () => {
                     ) : (
                         <Button
                             type="submit"
-                            className="ml-auto gap-1.5 w-full "
+                            className="ml-auto gap-1.5 w-full"
                             disabled={isLoading}
                         >
                             Send Message
