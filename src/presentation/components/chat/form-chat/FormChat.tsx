@@ -43,14 +43,14 @@ export const FormChat = () => {
                             variant="outline"
                             size="icon"
                             onClick={handleAbort}
-                            className="self-end"
+                            className="self-end animate-fade animate-duration-[600ms]"
                         >
                             <Square />
                         </Button>
                     ) : (
                         <Button
                             type="submit"
-                            className="ml-auto gap-1.5 w-full"
+                            className="ml-auto gap-1.5 w-full animate-fade animate-duration-[600ms]"
                             disabled={isLoading}
                         >
                             Send Message
