@@ -5,11 +5,16 @@ import { Message } from "../messages/Message";
 import { useEffect, useRef, useState } from "react";
 import { Brain } from "lucide-react";
 import Image from "next/image";
+import { MessageEntity } from "@/domain/entities";
 
-export const MessagesContainer = () => {
+interface Props {
+  messages?: MessageEntity[];
+}
+
+export const MessagesContainer = ({messages = []}:Props) => {
   const isBotTyping = useMessagesStore(state => state.isBotTyping);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const messages = useMessagesStore(state => state.messages);
+  
   const [isUserScroll, setIsUserScroll] = useState(false);
 
   useEffect(() => {
@@ -41,8 +46,10 @@ export const MessagesContainer = () => {
             <Image
               src={"/ollama.svg"}
               alt={"ollama"}
-              width={150}
-              height={150}
+              width={50}
+              height={50}
+              className="w-36 h-auto"
+              priority
             />
             <p className="text-xl font-semibold">Welcome, let&apos;s chat!!!</p>
           </div>

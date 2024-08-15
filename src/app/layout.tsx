@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Navbar, TooltipProvider } from "@/presentation/components";
+import { FormChat, Navbar, TooltipProvider } from "@/presentation/components";
 import { ThemeProvider } from "@/presentation/providers";
 
 
@@ -39,8 +39,13 @@ export default function RootLayout({
             <TooltipProvider>
               
               <Navbar />
-              <div className="pl-14">
-                {children}
+              <div className="pl-56">
+                <div className="sm:px-2 h-screen flex flex-col justify-center items-center">
+                  <div className="w-11/12 xl:w-8/12">
+                    {children}
+                    <FormChat />
+                  </div>
+                </div>
               </div>
             </TooltipProvider>
           </ThemeProvider>  
