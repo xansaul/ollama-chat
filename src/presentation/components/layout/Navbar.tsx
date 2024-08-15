@@ -1,6 +1,6 @@
 "use client";
 
-import { BotMessageSquare, EllipsisVertical, Trash2 } from "lucide-react";
+import { BotMessageSquare, EllipsisVertical, Plus, Trash2 } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -13,21 +13,29 @@ import {
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import { PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 export const Navbar = () => {
   return (
     <aside className="inset-y fixed left-0 z-20 flex h-full flex-col border-r w-56">
       <div className="border-b pt-3 flex flex-col items-center">
-        <BotMessageSquare />
+        <Image
+          src="/ollama.svg"
+          alt="ollama"
+          width={24}
+          height={24}
+          className="pt-3 w-12 h-12"
+          priority
+        />
 
-        <NavigationMenu className="py-3 min-w-full">
+        <NavigationMenu className="py-2 min-w-full">
           <NavigationMenuList>
             <NavigationMenuItem className="">
               <NavigationMenuLink
                 href="/"
                 className={navigationMenuTriggerStyle()}
               >
-                New chat
+                <Plus className="mr-1 w-5 h-5" /> New chat 
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
