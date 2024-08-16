@@ -1,4 +1,5 @@
 import { MessageEntity } from "@/domain/entities";
+import { Role } from "@prisma/client";
 import type { CoreMessage, Message } from "ai";
 
 export class MessageMapper {
@@ -14,6 +15,19 @@ export class MessageMapper {
         return {
             content: message.message,
             role: message.from === 'user' ? 'user': 'assistant',
+        }
+    }
+    
+    public static fromDatabaseMessageToMessageEntity(message: {
+        id: string;
+        message: string;
+        role: Role;
+        chatId: string;
+    }): MessageEntity {
+        return {
+            message: message.message,
+            id: message.id,
+            from: message.role === 'USER' ? 'user' : 'bot'
         }
     }
 }

@@ -1,6 +1,19 @@
-version: '3.9'
 
 services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    env_file:
+      - path: ./.env.local
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   ollama:
     image: ollama/ollama

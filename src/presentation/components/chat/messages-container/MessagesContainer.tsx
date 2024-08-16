@@ -6,16 +6,24 @@ import { useEffect, useRef, useState } from "react";
 import { Brain } from "lucide-react";
 import Image from "next/image";
 import { MessageEntity } from "@/domain/entities";
+import { MessageSkeleton } from "../messages/MessageSkeleton";
 
 interface Props {
-  messages?: MessageEntity[];
+  messagesDatabase?: MessageEntity[];
+
 }
 
-export const MessagesContainer = ({messages = []}:Props) => {
+export const MessagesContainer = ({ messagesDatabase = [] }: Props) => {
   const isBotTyping = useMessagesStore(state => state.isBotTyping);
+  const messages = useMessagesStore(state => state.messages);
+  const setMessages = useMessagesStore(state => state.setMessages);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const [isUserScroll, setIsUserScroll] = useState(false);
+
+  useEffect(() => {
+    setMessages(messagesDatabase);
+  }, [messagesDatabase, setMessages]);
 
   useEffect(() => {
     if (chatContainerRef.current && !isUserScroll) {
@@ -41,7 +49,7 @@ export const MessagesContainer = ({messages = []}:Props) => {
     <div className="mb-2 relative min-h-[80vh] max-h-[80vh] overflow-y-auto overflow-x-hidden rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
 
       {
-        messages.length <= 0 && (
+        messages.length <= 0  && (
           <div className="flex-1 flex flex-col justify-center items-center gap-7 opacity-50 ">
             <Image
               src={"/ollama.svg"}
@@ -55,6 +63,7 @@ export const MessagesContainer = ({messages = []}:Props) => {
           </div>
         )
       }
+
       {
         messages.map((message) => {
 

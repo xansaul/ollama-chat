@@ -1,5 +1,6 @@
 export * from './chat/messages-container/MessagesContainer';
 export * from './chat/form-chat/FormChat';
+export * from './chat/messages/MessageSkeleton'
 
 export * from './layout/Navbar';
 

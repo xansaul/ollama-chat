@@ -13,7 +13,7 @@ import { useFormChat } from "@/presentation/hooks/components/useFormChat";
 
 export const FormChat = () => {
 
-    const { handleAbort, handleSendMessage, isLoading, message, setMessage } = useFormChat();
+    const { handleAbort, handleSendMessage, isBotTyping, message, setMessage } = useFormChat();
 
     return (
         <form
@@ -38,20 +38,20 @@ export const FormChat = () => {
                 </div>
 
                 <div className="flex flex-col col-span-2 p-2 ">
-                    {isLoading ? (
+                    {isBotTyping ? (
                         <Button
                             variant="outline"
                             size="icon"
                             onClick={handleAbort}
-                            className="self-end animate-fade animate-duration-[600ms]"
+                            className="self-end animate-fade"
                         >
                             <Square />
                         </Button>
                     ) : (
                         <Button
                             type="submit"
-                            className="ml-auto gap-1.5 w-full animate-fade animate-duration-[600ms]"
-                            disabled={isLoading}
+                            className="ml-auto gap-1.5 w-full"
+                            disabled={isBotTyping}
                         >
                             Send Message
                             <CornerDownLeft className="size-3.5" />

@@ -1,13 +1,8 @@
-import { MessagesContainer } from "@/presentation/components";
-
+import { NewChat } from "@/presentation/components/chat/chat/NewChat";
 
 export default async function Home() {
-  
-
   return (
-    <main>
-        <MessagesContainer />
-    </main>
+    <NewChat />
   );
 }
 

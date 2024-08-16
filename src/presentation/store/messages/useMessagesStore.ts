@@ -4,9 +4,11 @@ import { create } from 'zustand';
 interface MessageStoreState {
     messages: MessageEntity[];
     createMessage: (messageEntity:MessageEntity)=>MessageEntity[];
-    updateMessageStream: (message: string) =>void;
+    createOrUpdateMessageStream: (message: MessageEntity) =>void;
     isBotTyping: boolean;
-    toggleIsBotTyping: () => void;
+    setBotIsTyping: (isTyping: boolean)=>void;
+    setMessages: (messages: MessageEntity[]) => void;
+    getMessages: () => MessageEntity[];
 }
 
 export const useMessagesStore = create<MessageStoreState>()((set, get)=>({
@@ -18,17 +20,28 @@ export const useMessagesStore = create<MessageStoreState>()((set, get)=>({
         }));
         return get().messages;
     },
-    updateMessageStream: (message: string)=>{
-        const lastMessageIndex = get().messages.length-1;
-        const newMessages = [...get().messages];
-        newMessages[lastMessageIndex].message = message;
+    createOrUpdateMessageStream: (messageToCreateOrUpdate: MessageEntity)=>{
+        const message = get().messages.find(messageStore=>messageStore.id===messageToCreateOrUpdate.id);
 
-        set(()=>({
-            messages: newMessages
-        }));
+        if(!message){
+            set(state=>({messages: [...state.messages, messageToCreateOrUpdate]}));
+            return;
+        }
+        message.message += messageToCreateOrUpdate.message;
+        const newMessages = get().messages.map(messageSotore=>{
+            if(message.id === messageSotore.id){
+                return message;
+            }
+            return messageSotore;
+        })
+        set(()=>({messages: newMessages}));
+    },
+    setBotIsTyping:(isTyping: boolean)=>{
+        set({isBotTyping:isTyping})
     },
     isBotTyping: false,
-    toggleIsBotTyping: () => {
-        set(state=>({isBotTyping: !state.isBotTyping}))
-    }
+    setMessages: (messages: MessageEntity[])=>{
+        set({messages})
+    },
+    getMessages: () => get().messages,
 }));

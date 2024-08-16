@@ -1,16 +1,24 @@
-import { sendMessageUseCase } from "@/domain/use-cases/send-message.use-case";
+import { MessageEntity } from "@/domain/entities";
+import { createNewChatUseCase, sendMessageUseCase } from "@/domain";
 import { useMessagesStore } from "@/presentation/store";
 import { useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { useParams, useRouter } from 'next/navigation'
 
 export const useFormChat = () => {
 
-    const createMessage = useMessagesStore((state) => state.createMessage);
-    const toggleIsBotTyping = useMessagesStore((state) => state.toggleIsBotTyping);
-    const updateMessageStream = useMessagesStore(
-        (state) => state.updateMessageStream
-    );
+    const router = useRouter();
 
+    const createMessage = useMessagesStore((state) => state.createMessage);
+    const setBotIsTyping = useMessagesStore((state) => state.setBotIsTyping);
+    const isBotTyping = useMessagesStore((state) => state.isBotTyping);
+    const getMessages = useMessagesStore(state => state.getMessages);
+    
+    const createOrUpdateMessageStream = useMessagesStore(
+        (state) => state.createOrUpdateMessageStream
+    );
+    const { id } = useParams<{ id: string }>()
+    
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -21,37 +29,62 @@ export const useFormChat = () => {
         event.preventDefault();
         if (message === "") return;
 
-        if (isRunning.current) {
-            abortController.current.abort();
-            abortController.current = new AbortController();
+        setMessage("");
+        setIsLoading(true);
+       
+        const messages = getMessages();
+        
+        if (!id) {
+            await createNewChat({ from: "user", message });
+            return;
         }
 
-        setMessage("");
+        generateMessage([...messages, {from: "user", message, id: uuidv4() }], id);
+        
+    };
 
+    const createNewChat = async (message: MessageEntity) => {
+        const data = await createNewChatUseCase(message.message);
+        if (data === null) {
+            console.error("Error creating chat");
+            return null;
+        }
+
+        const { chat } = data;
         
-        setIsLoading(true);
-        toggleIsBotTyping();
         
-        const messages = createMessage({
-            id: uuidv4(),
-            message,
-            from: "user",
-        });
-        
+        router.push(`/chat/${chat.id}`);
+        router.refresh();
+        await generateMessage([message], chat.id);
+    }
+
+
+    const generateMessage = async (messages: MessageEntity[], chatId: string) => {
+
         const stream = sendMessageUseCase(
-            messages,
+            { messages, chatId },
             abortController.current.signal
         );
-        createMessage({ from: "bot", message: "", id: uuidv4() });
-        for await (const text of stream) {
-            updateMessageStream(text);
-        }
+
+        createMessage(messages.at(-1)!);
         
-        toggleIsBotTyping();
+        setBotIsTyping(true);
+        for await (const text of stream) {
+            const data = JSON.parse(text);
+    
+            createOrUpdateMessageStream({
+                from: "bot",
+                message: data.botMessage.message,
+                id: data.botMessage.id
+            });
+        }
+
+        setBotIsTyping(false);
         setIsLoading(false);
 
         isRunning.current = false;
-    };
+
+    }
 
     const handleAbort = () => {
         if (abortController.current) {
@@ -67,6 +100,7 @@ export const useFormChat = () => {
         handleAbort,
         isLoading,
         setMessage,
-        message
+        message,
+        isBotTyping
     }
 }

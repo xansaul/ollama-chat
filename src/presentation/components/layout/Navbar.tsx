@@ -1,8 +1,8 @@
 "use client";
 
-import { BotMessageSquare, EllipsisVertical, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import React from "react";
-import { cn } from "@/lib/utils";
+
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -10,12 +10,21 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/presentation/components/ui/navigation-menu";
-import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
-import { PopoverContent } from "../ui/popover";
-import { Button } from "../ui/button";
-import Image from "next/image";
 
-export const Navbar = () => {
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { NavItem } from "./NavItem";
+
+interface Props {
+  chats: {
+    id: string;
+    title: string;
+  }[];
+}
+
+export const Navbar = ({ chats }: Props) => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <aside className="inset-y fixed left-0 z-20 flex h-full flex-col border-r w-56">
       <div className="border-b pt-3 flex flex-col items-center">
@@ -35,7 +44,7 @@ export const Navbar = () => {
                 href="/"
                 className={navigationMenuTriggerStyle()}
               >
-                <Plus className="mr-1 w-5 h-5" /> New chat 
+                <Plus className="mr-1 w-5 h-5" /> New chat
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -44,29 +53,15 @@ export const Navbar = () => {
 
       <div className="w-full overflow-hidden">
         <NavigationMenu className="py-3 min-w-full">
-          <NavigationMenuList>
-            <NavigationMenuItem
-              className={cn(
-                navigationMenuTriggerStyle(),
-                "w-7 flex min-w-52 justify-between gap-1 "
-              )}
-            >
-              <NavigationMenuLink
-                href="/"
-              >
-                <span className="block w-40 overflow-hidden">test chat</span>
-              </NavigationMenuLink>
-              <Popover>
-                <PopoverTrigger>
-                  <EllipsisVertical size="16" />
-                </PopoverTrigger>
-                <PopoverContent className="w-auto">
-                  <Button variant="ghost" className="text-red-400">
-                    <Trash2 className="mr-2 h-4 w-4" /> Eliminate
-                  </Button>
-                </PopoverContent>
-              </Popover>
-            </NavigationMenuItem>
+          <NavigationMenuList className=" flex flex-col gap-1">
+            {chats.map((chat) => (
+              <NavItem
+                id={chat.id}
+                title={chat.title}
+                key={chat.id}
+                isActive={id === chat.id}
+              />
+            ))}
           </NavigationMenuList>
         </NavigationMenu>
       </div>

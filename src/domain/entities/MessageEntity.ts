@@ -1,7 +1,7 @@
 import { AvilableRols } from "./UserEntity";
 
 export interface MessageEntity {
-    id: string;
+    id?: string;
     message: string;
     from: AvilableRols;
 }

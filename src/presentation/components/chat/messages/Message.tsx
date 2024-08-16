@@ -9,13 +9,12 @@ import { CustomMarkdown } from "../markdown/CustomMarkdown";
 
 const messageVariants = cva(
   `
-    animate-once animate-duration-[320ms] animate-ease-linear
     w-fit max-w-full border-primary/20 my-2
   `,{
     variants: {
       variant: {
-        bot: "bg-primary/10 self-start animate-fade-right",
-        user: "bg-blue-700 self-end animate-fade-left "
+        bot: "bg-primary/10 self-start",
+        user: "bg-blue-700 self-end"
       }
     },
     defaultVariants: {
