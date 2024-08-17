@@ -8,7 +8,6 @@ interface MessageStoreState {
     isBotTyping: boolean;
     setBotIsTyping: (isTyping: boolean)=>void;
     setMessages: (messages: MessageEntity[]) => void;
-    getMessages: () => MessageEntity[];
     abortController: AbortController;
     handleAbort: () => void;
 }
@@ -45,7 +44,6 @@ export const useMessagesStore = create<MessageStoreState>()((set, get)=>({
     setMessages: (messages: MessageEntity[])=>{
         set({messages})
     },
-    getMessages: () => get().messages,
     abortController: new AbortController(),
     handleAbort: () => {
         if (get().abortController) {

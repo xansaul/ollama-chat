@@ -12,7 +12,6 @@ export const useFormChat = () => {
     const createMessage = useMessagesStore((state) => state.createMessage);
     const setBotIsTyping = useMessagesStore((state) => state.setBotIsTyping);
     const isBotTyping = useMessagesStore((state) => state.isBotTyping);
-    const getMessages = useMessagesStore(state => state.getMessages);
     const abortController = useMessagesStore(state => state.abortController);
     const handleAbort = useMessagesStore(state => state.handleAbort);
     
@@ -33,14 +32,15 @@ export const useFormChat = () => {
         setMessage("");
 
        
-        const messages = getMessages();
+        const messages = createMessage({from: "user", message, id: uuidv4() });
+        
         
         if (!id) {
-            await createNewChat({ from: "user", message });
+            await createNewChat(messages.at(0)!);
             return;
         }
 
-        generateMessage([...messages, {from: "user", message, id: uuidv4() }], id);
+        generateMessage([...messages ], id);
         
     };
 
@@ -66,8 +66,7 @@ export const useFormChat = () => {
             abortController.signal
         );
 
-        createMessage(messages.at(-1)!);
-        
+
         setBotIsTyping(true);
         for await (const text of stream) {
             try {
