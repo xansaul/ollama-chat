@@ -30,7 +30,7 @@ export const FormChat = () => {
                     <Textarea
                         id="message"
                         placeholder="Type your message here..."
-                        className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                        className="min-h-24 resize-none border-0 p-3 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                         onChange={(event) => setMessage(event.target.value)}
                         value={message}
 
@@ -61,27 +61,6 @@ export const FormChat = () => {
 
                 </div>
 
-
-            </div>
-            <div className="flex items-center p-2 pt-0">
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <Paperclip className="size-4" />
-                            <span className="sr-only">Attach file</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Attach File</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <Mic className="size-4" />
-                            <span className="sr-only">Use Microphone</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Use Microphone</TooltipContent>
-                </Tooltip>
 
             </div>
         </form>
