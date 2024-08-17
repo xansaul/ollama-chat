@@ -4,4 +4,5 @@ export interface MessageEntity {
     id?: string;
     message: string;
     from: AvilableRols;
+    createdAt?: Date;
 }

@@ -7,6 +7,7 @@ import prisma from "@/lib/db";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { createOllama } from 'ollama-ai-provider';
+import { revalidatePath } from "next/cache";
 
 const messageSchema = z.object({
   content: z.string(),
@@ -42,6 +43,7 @@ export async function POST(req: Request) {
       message: lastMessage!.content as string,
     },
   });
+  revalidatePath(`/chat/${data.chatId}`);
 
   const botMessage = {
     id: uuidv4(),
@@ -68,10 +70,13 @@ export async function POST(req: Request) {
             `${JSON.stringify({ botMessage: { ...botMessage, message: partOfText }, userMessage })}`
           );
           botMessage.message += partOfText;
-          
           controller.enqueue(chunkData);
         }
 
+
+      } catch (error) {
+        controller.error(error);
+      } finally {
         await prisma.message.create({
           data: {
             message: botMessage.message,
@@ -80,10 +85,9 @@ export async function POST(req: Request) {
             chatId: data.chatId
           },
         });
-      } catch (error) {
-        controller.error(error);
-      } finally {
+        revalidatePath(`/chat/${data.chatId}`);
         controller.close();
+
       }
     },
   });

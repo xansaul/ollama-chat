@@ -1,5 +1,7 @@
+
 import { getChatById } from "@/actions/find-chat-by-id.action";
-import { Chat } from "@/presentation/components/chat/chat/Chat";
+import { getMessagesById } from "@/actions/get-messages-by-id.action";
+import { MessagesContainer } from "@/presentation/components";
 import { redirect } from 'next/navigation'
 
 
@@ -15,7 +17,9 @@ export default async function ChatPage({ params }:Props) {
         redirect("/");
     }
 
+    const messages = await getMessagesById(id);
+
     return (
-        <Chat id={id} />
+        <MessagesContainer messagesDatabase={messages} />
     );
 }

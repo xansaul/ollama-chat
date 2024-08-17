@@ -13,6 +13,8 @@ export const useFormChat = () => {
     const setBotIsTyping = useMessagesStore((state) => state.setBotIsTyping);
     const isBotTyping = useMessagesStore((state) => state.isBotTyping);
     const getMessages = useMessagesStore(state => state.getMessages);
+    const abortController = useMessagesStore(state => state.abortController);
+    const handleAbort = useMessagesStore(state => state.handleAbort);
     
     const createOrUpdateMessageStream = useMessagesStore(
         (state) => state.createOrUpdateMessageStream
@@ -20,17 +22,16 @@ export const useFormChat = () => {
     const { id } = useParams<{ id: string }>()
     
     const [message, setMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    const abortController = useRef<AbortController>(new AbortController());
+    
     const isRunning = useRef(false);
+
 
     const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (message === "") return;
 
         setMessage("");
-        setIsLoading(true);
+
        
         const messages = getMessages();
         
@@ -58,47 +59,43 @@ export const useFormChat = () => {
         await generateMessage([message], chat.id);
     }
 
-
     const generateMessage = async (messages: MessageEntity[], chatId: string) => {
 
         const stream = sendMessageUseCase(
             { messages, chatId },
-            abortController.current.signal
+            abortController.signal
         );
 
         createMessage(messages.at(-1)!);
         
         setBotIsTyping(true);
         for await (const text of stream) {
-            const data = JSON.parse(text);
-    
-            createOrUpdateMessageStream({
-                from: "bot",
-                message: data.botMessage.message,
-                id: data.botMessage.id
-            });
+            try {
+                
+                const data = JSON.parse(text);
+        
+                createOrUpdateMessageStream({
+                    from: "bot",
+                    message: data.botMessage.message,
+                    id: data.botMessage.id
+                });
+            } catch (error) {
+                console.log(error);
+                console.log(`Character: ${text}`);
+            }
         }
 
         setBotIsTyping(false);
-        setIsLoading(false);
+
 
         isRunning.current = false;
-
+        router.refresh();
     }
-
-    const handleAbort = () => {
-        if (abortController.current) {
-            abortController.current.abort("User request");
-            abortController.current = new AbortController();
-            setIsLoading(false);
-        }
-    };
 
 
     return {
         handleSendMessage,
         handleAbort,
-        isLoading,
         setMessage,
         message,
         isBotTyping

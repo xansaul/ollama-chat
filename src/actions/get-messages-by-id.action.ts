@@ -5,10 +5,9 @@ import { MessageMapper } from "@/infrastructure/mappers/message-mappers/MessageM
 import prisma from "@/lib/db";
 import { Message } from "@prisma/client";
 
-
-
-
 export async function getMessagesById(id: string): Promise<MessageEntity[]> {
-    const messages = await prisma.message.findMany({ where: { chatId: id } });
-    return messages.map((message: Message) => MessageMapper.fromDatabaseMessageToMessageEntity(message));
+  const messages = await prisma.message.findMany({ where: { chatId: id }, orderBy: { createdAt: 'asc' } });
+  return messages.map((message: Message) =>
+    MessageMapper.fromDatabaseMessageToMessageEntity(message)
+  );
 }

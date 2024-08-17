@@ -23,11 +23,13 @@ export class MessageMapper {
         message: string;
         role: Role;
         chatId: string;
+        createdAt: Date
     }): MessageEntity {
         return {
             message: message.message,
             id: message.id,
-            from: message.role === 'USER' ? 'user' : 'bot'
+            from: message.role === 'USER' ? 'user' : 'bot',
+            createdAt: message.createdAt
         }
     }
 }

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 
-export async function deleteChatByid(id:string){
+export async function deleteChatByid(id:string, isCurrentChat: boolean){
     await prisma.message.deleteMany({
         where: {chatId: id}
     });
@@ -14,5 +14,7 @@ export async function deleteChatByid(id:string){
         where: {id}
     });
     revalidatePath('/', 'layout');
-    redirect("/");
+    if(isCurrentChat){
+        redirect("/");
+    }
 }

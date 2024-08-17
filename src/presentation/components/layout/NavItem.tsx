@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from '../ui/navigation-menu'
 import { deleteChatByid } from '@/actions/delete-chat-by-id.action'
@@ -7,6 +8,7 @@ import { EllipsisVertical, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { useMessagesStore } from '@/presentation/store';
 
 interface Props {
     id: string;
@@ -16,15 +18,14 @@ interface Props {
 
 
 export const NavItem = ({id, isActive, title}:Props) => {
-
+    const handleAbort = useMessagesStore(state=>state.handleAbort)
     const handleDelete= ()=>{
-        deleteChatByid(id)
+        deleteChatByid(id, isActive ? true : false)
     }
 
     return (
         <NavigationMenuItem
-
-            key={id}
+            onClick={handleAbort}
             className={cn(
                 navigationMenuTriggerStyle(),
                 "w-7 flex min-w-52 justify-between gap-1 ", {

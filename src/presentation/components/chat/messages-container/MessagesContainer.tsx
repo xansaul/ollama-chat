@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { Brain } from "lucide-react";
 import Image from "next/image";
 import { MessageEntity } from "@/domain/entities";
-import { MessageSkeleton } from "../messages/MessageSkeleton";
 
 interface Props {
   messagesDatabase?: MessageEntity[];
