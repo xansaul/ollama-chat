@@ -28,19 +28,19 @@ export const NavItem = ({id, isActive, title}:Props) => {
             onClick={handleAbort}
             className={cn(
                 navigationMenuTriggerStyle(),
-                "w-7 flex min-w-52 justify-between gap-1 ", {
+                "w-7 flex min-w-52 max-w-52 overflow-hidden justify-between gap-1 ", {
                 "bg-accent text-accent-foreground": isActive
             }
             )}
         >
             <Link href={`/chat/${id}`} legacyBehavior passHref>
                 <NavigationMenuLink>
-                    <span className="block w-40 overflow-hidden">{title}</span>
+                    <span className="block min-w-40 max-w-40 overflow-hidden text-nowrap ">{title}</span>
                 </NavigationMenuLink>
             </Link>
             <Popover>
                 <PopoverTrigger>
-                    <EllipsisVertical size="16" />
+                    <EllipsisVertical size="18" />
                 </PopoverTrigger>
                 <PopoverContent className="w-auto">
                     <Button variant="ghost" className="text-red-400" onClick={handleDelete}>
