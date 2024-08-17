@@ -28,7 +28,7 @@ export const NavItem = ({id, title}:Props) => {
             onClick={handleAbort}
             className={cn(
                 navigationMenuTriggerStyle(),
-                "w-7 flex min-w-52 max-w-52 overflow-hidden justify-between gap-1 ", {
+                "min-w-full max-w-full flex overflow-hidden justify-between gap-1 ", {
                 "bg-accent text-accent-foreground": currentPathId === id
             }
             )}
@@ -44,7 +44,7 @@ export const NavItem = ({id, title}:Props) => {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto">
                     <Button variant="ghost" className="text-red-400" onClick={handleDelete}>
-                        <Trash2 className="mr-2 h-4 w-4" /> Eliminate
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete
                     </Button>
                 </PopoverContent>
             </Popover>

@@ -7,8 +7,8 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "../../../ui/navigation-menu";
-import { NavItem } from "./NavItem";
 import { Plus } from "lucide-react";
+import { Nav } from "../nav/Nav";
 
 interface Props {
     chats: {
@@ -34,7 +34,7 @@ export const AsideNav = async ({ chats }:Props) => {
         <NavigationMenu className="py-2 min-w-full">
           <NavigationMenuList>
             <NavigationMenuItem className="">
-              <NavigationMenuLink
+            <NavigationMenuLink
                 href="/"
                 className={navigationMenuTriggerStyle()}
               >
@@ -46,17 +46,7 @@ export const AsideNav = async ({ chats }:Props) => {
       </div>
 
       <div className="w-full overflow-hidden">
-        <NavigationMenu className="py-3 min-w-full">
-          <NavigationMenuList className=" flex flex-col gap-1">
-            {chats.map((chat) => (
-              <NavItem
-                id={chat.id}
-                title={chat.title}
-                key={chat.id}
-              />
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+      <Nav chats={chats} />
       </div>
     </aside>
   );
