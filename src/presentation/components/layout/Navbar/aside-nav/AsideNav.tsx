@@ -1,32 +1,26 @@
-"use client";
-
-import { Plus } from "lucide-react";
+import Image from "next/image";
 import React from "react";
-
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from "@/presentation/components/ui/navigation-menu";
-
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import { NavItem } from "./NavItem";
+} from "../../../ui/navigation-menu";
+import { Plus } from "lucide-react";
+import { Nav } from "../nav/Nav";
 
 interface Props {
-  chats: {
-    id: string;
-    title: string;
-  }[];
+    chats: {
+        id: string;
+        title: string;
+    }[]
 }
 
-export const Navbar = ({ chats }: Props) => {
-  const { id } = useParams<{ id: string }>();
-
+export const AsideNav = async ({ chats }:Props) => {
+  
   return (
-    <aside className="inset-y fixed left-0 z-20 flex h-full flex-col border-r w-56">
+    <aside className="hidden inset-y fixed left-0 z-20 lg:flex h-full flex-col border-r w-56">
       <div className="border-b pt-3 flex flex-col items-center">
         <Image
           src="/ollama.svg"
@@ -40,7 +34,7 @@ export const Navbar = ({ chats }: Props) => {
         <NavigationMenu className="py-2 min-w-full">
           <NavigationMenuList>
             <NavigationMenuItem className="">
-              <NavigationMenuLink
+            <NavigationMenuLink
                 href="/"
                 className={navigationMenuTriggerStyle()}
               >
@@ -52,18 +46,7 @@ export const Navbar = ({ chats }: Props) => {
       </div>
 
       <div className="w-full overflow-hidden">
-        <NavigationMenu className="py-3 min-w-full">
-          <NavigationMenuList className=" flex flex-col gap-1">
-            {chats.map((chat) => (
-              <NavItem
-                id={chat.id}
-                title={chat.title}
-                key={chat.id}
-                isActive={id === chat.id}
-              />
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+      <Nav chats={chats} />
       </div>
     </aside>
   );

@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
 
 export async function deleteChatByid(id:string, isCurrentChat: boolean){
@@ -15,6 +15,6 @@ export async function deleteChatByid(id:string, isCurrentChat: boolean){
     });
     revalidatePath('/', 'layout');
     if(isCurrentChat){
-        redirect("/");
+        redirect("/", RedirectType.replace);
     }
 }
