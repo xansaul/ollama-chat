@@ -1,26 +1,26 @@
 'use client';
 import React from 'react'
-import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from '../ui/navigation-menu'
+import { NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from '../../../ui/navigation-menu'
 import { deleteChatByid } from '@/actions/delete-chat-by-id.action'
 import { cn } from '@/lib/utils'
-
 import { EllipsisVertical, Trash2 } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Button } from '../../../ui/button'
 import Link from 'next/link'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover'
 import { useMessagesStore } from '@/presentation/store';
+import { useParams } from 'next/navigation';
 
 interface Props {
     id: string;
     title: string;
-    isActive?: boolean;
 }
 
 
-export const NavItem = ({id, isActive, title}:Props) => {
-    const handleAbort = useMessagesStore(state=>state.handleAbort)
+export const NavItem = ({id, title}:Props) => {
+    const handleAbort = useMessagesStore(state=>state.handleAbort);
+    const { id: currentPathId } = useParams<{ id: string }>();
     const handleDelete= ()=>{
-        deleteChatByid(id, isActive ? true : false)
+        deleteChatByid(id, currentPathId === id)
     }
 
     return (
@@ -29,7 +29,7 @@ export const NavItem = ({id, isActive, title}:Props) => {
             className={cn(
                 navigationMenuTriggerStyle(),
                 "w-7 flex min-w-52 max-w-52 overflow-hidden justify-between gap-1 ", {
-                "bg-accent text-accent-foreground": isActive
+                "bg-accent text-accent-foreground": currentPathId === id
             }
             )}
         >
