@@ -26,7 +26,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "sm:min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
@@ -40,7 +40,7 @@ export default async function RootLayout({
 
             <Navbar />
             <div className="lg:pl-56 lg:pt-0 pt-3">
-              <div className="sm:px-2 h-screen flex flex-col justify-start lg:justify-center items-center">
+              <div className="sm:px-2 sm:h-screen h-auto flex flex-col justify-start lg:justify-center items-center">
 
                 <div className="w-11/12 2xl:w-8/12">
                   {children}
