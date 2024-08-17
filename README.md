@@ -6,17 +6,22 @@
     ```bash
     docker-compose up -d
     ```
-3. Install dependencies:
+3. Pull ollama model:
+    ```bash
+    # In the folder of docker-compose.yml
+    docker-compose exec ollama ollama pull llama3.1
+    ```
+4. Install dependencies:
 
     ```bash
     npm install
     ```
-4. Run database migrations:
+5. Run database migrations:
 
     ```bash
     npx prisma migrate dev
     ```
-5. Run the development server:
+6. Run the development server:
     ```bash
     npm run dev
     ```
@@ -28,22 +33,27 @@
     ```bash
     docker-compose up -d
     ```
-3. Install dependencies:
+3. Pull ollama model:
+    ```bash
+    # In the folder of docker-compose.yml
+    docker-compose exec ollama ollama pull llama3.1
+    ```
+4. Install dependencies:
 
     ```bash
     npm install
     ```
-4. Run database migrations:
+5. Run database migrations:
 
     ```bash
     npx prisma migrate deploy
     ```
-5. Create the production build:
+6. Create the production build:
     ```bash
     npm run build
     ```
 
-6. Run server:
+7. Run server:
     ```bash
     npm start
     ```
