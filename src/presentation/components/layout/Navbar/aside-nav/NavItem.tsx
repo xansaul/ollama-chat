@@ -25,7 +25,6 @@ export const NavItem = ({id, title}:Props) => {
 
     return (
         <NavigationMenuItem
-            onClick={handleAbort}
             className={cn(
                 navigationMenuTriggerStyle(),
                 "min-w-full max-w-full flex overflow-hidden justify-between gap-1 ", {
@@ -35,7 +34,7 @@ export const NavItem = ({id, title}:Props) => {
         >
             <Link href={`/chat/${id}`} legacyBehavior passHref>
                 <NavigationMenuLink>
-                    <span className="block min-w-40 max-w-40 overflow-hidden text-nowrap ">{title}</span>
+                    <span onClick={handleAbort} className="block min-w-40 max-w-40 overflow-hidden text-nowrap ">{title}</span>
                 </NavigationMenuLink>
             </Link>
             <Popover>
