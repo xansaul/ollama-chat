@@ -25,9 +25,9 @@ export const useFormChat = () => {
     const isRunning = useRef(false);
 
 
-    const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleSendMessage = async () => {
         if (message === "") return;
+        if (isRunning.current) return;
 
         setMessage("");
 
@@ -39,6 +39,8 @@ export const useFormChat = () => {
             await createNewChat(messages.at(0)!);
             return;
         }
+        console.log("entré")
+        
 
         generateMessage([...messages ], id);
         
@@ -66,6 +68,7 @@ export const useFormChat = () => {
             abortController.signal
         );
 
+        isRunning.current = true;
 
         setBotIsTyping(true);
         for await (const text of stream) {

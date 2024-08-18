@@ -16,8 +16,7 @@ export const FormChat = () => {
     const { handleAbort, handleSendMessage, isBotTyping, message, setMessage } = useFormChat();
 
     return (
-        <form
-            onSubmit={handleSendMessage}
+        <div
             className="relative overflow-y-visible h-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
         >
 
@@ -40,6 +39,7 @@ export const FormChat = () => {
                 <div className="flex flex-col col-span-2 p-2 ">
                     {isBotTyping ? (
                         <Button
+                            type="button"
                             variant="outline"
                             size="icon"
                             onClick={handleAbort}
@@ -49,7 +49,7 @@ export const FormChat = () => {
                         </Button>
                     ) : (
                         <Button
-                            type="submit"
+                            onClick={handleSendMessage}
                             className="ml-auto gap-1.5 w-full"
                             disabled={isBotTyping}
                         >
@@ -63,6 +63,6 @@ export const FormChat = () => {
 
 
             </div>
-        </form>
+        </div>
     );
 };
