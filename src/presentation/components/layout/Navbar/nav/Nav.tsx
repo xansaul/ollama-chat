@@ -27,7 +27,7 @@ export const Nav = ({ chats }: Props) => {
       <NavigationMenuList className="flex flex-col gap-1">
         <Link
           href="/"
-          className={cn(navigationMenuTriggerStyle(), "w-full")}
+          className={cn(navigationMenuTriggerStyle(), "w-auto")}
         >
           <span onClick={handleAbort} className="flex">
             <Plus className="mr-1 w-5 h-5" /> New chat
