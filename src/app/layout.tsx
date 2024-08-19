@@ -42,7 +42,7 @@ export default async function RootLayout({
             <div className="lg:pl-56 lg:pt-0 pt-3">
               <div className="sm:px-2 sm:h-screen h-auto flex flex-col justify-start lg:justify-center items-center">
 
-                <div className="w-11/12 2xl:w-8/12">
+                <div className="w-11/12 lg:w-9/12 2xl:w-8/12">
                   {children}
                   <FormChat />
                 </div>

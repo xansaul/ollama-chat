@@ -29,7 +29,7 @@ export const MobileNav = ({ chats }: Props) => {
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="min-w-64 max-w-64 px-2 w-auto">
-                        <SheetHeader className="mb-5">
+                        <SheetHeader>
                             <SheetTitle className="text-center">Chats</SheetTitle>
                             <Image
                                 src="/ollama.svg"
@@ -41,13 +41,7 @@ export const MobileNav = ({ chats }: Props) => {
                             />
                             <SheetDescription></SheetDescription>
                         </SheetHeader>
-                        <Link
-                            href="/"
-                            className={cn(navigationMenuTriggerStyle(), "w-full")}
-                        >
-                            <Plus className="mr-1 w-5 h-5" /> New chat
-                        </Link>
-                        <Separator className="my-4" />
+
                         <div className="w-full">
                             <Nav chats={chats} />
                         </div>

@@ -20,7 +20,7 @@ export const FormChat = () => {
             className="relative overflow-y-visible h-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
         >
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 h-auto">
+            <div className="grid grid-cols-1 xl:grid-cols-12 h-auto">
                 <div className="col-span-10 h-auto">
                     <Label htmlFor="message" className="sr-only">
                         Message
