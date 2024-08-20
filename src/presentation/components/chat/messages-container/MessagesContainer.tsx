@@ -45,7 +45,7 @@ export const MessagesContainer = ({ messagesDatabase = [] }: Props) => {
   }
 
   return (
-    <div className="mb-2 relative min-h-[65vh] max-h-[65vh] lg:min-h-[80vh]  lg:max-h-[80vh] overflow-y-auto overflow-x-hidden rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
+    <div className="mb-2 relative min-h-[65vh] max-h-[65vh] lg:min-h-[75vh] md:max-h-[75vh] xl:min-h-[80vh]  xl:max-h-[80vh] overflow-y-auto overflow-x-hidden rounded-xl bg-secondary/40 p-4 lg:col-span-2 flex flex-col" ref={chatContainerRef} onScroll={handleScrollUser}>
 
       {
         messages.length <= 0  && (

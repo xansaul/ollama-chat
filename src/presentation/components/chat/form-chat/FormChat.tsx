@@ -20,8 +20,8 @@ export const FormChat = () => {
             className="relative overflow-y-visible h-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
         >
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 h-auto">
-                <div className="col-span-10 h-auto">
+            <div className="grid grid-cols-1 md:grid-cols-12 h-auto">
+                <div className="col-span-9 h-auto">
                     <Label htmlFor="message" className="sr-only">
                         Message
                     </Label>
@@ -36,7 +36,7 @@ export const FormChat = () => {
                     />
                 </div>
 
-                <div className="flex flex-col col-span-2 p-2 ">
+                <div className="flex flex-col col-span-3 p-2 ">
                     {isBotTyping ? (
                         <Button
                             type="button"
@@ -50,11 +50,11 @@ export const FormChat = () => {
                     ) : (
                         <Button
                             onClick={handleSendMessage}
-                            className="ml-auto gap-1.5 w-full"
+                            className="gap-1 w-full"
                             disabled={isBotTyping}
                         >
                             Send Message
-                            <CornerDownLeft className="size-3.5" />
+                            <CornerDownLeft className="w-4" />
                         </Button>
                     )
                     }
